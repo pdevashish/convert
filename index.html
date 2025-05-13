@@ -114,14 +114,14 @@
         return;
       }
       if(r.length<5){
-        q.textContent="Error: Not enough bytes to extract Mob and Hand.";
+        q.textContent="Error: Not enough bytes to extract mike value and hotel value.";
         return;
       }
       try{
         let s=j(r);
-        q.textContent+="Mob: "+s.n+"\nHand: "+s.o;
+        q.textContent+="mike value: "+s.n+"\nhotel value: "+s.o;
       }catch{
-        q.textContent+="Error: Failed to extract or convert Mob and Hand.";
+        q.textContent+="Error: Failed to extract or convert mike value and hotel value.";
       }
     }
   </script>
