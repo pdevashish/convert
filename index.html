@@ -2,21 +2,97 @@
 <html>
 <head>
   <title>Converter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    input[type="text"] {
+      width: 300px;
+      font-size: 16px;
+      padding: 5px;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 5px 10px;
+    }
+
+    #output {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      font-family: monospace;
+    }
+  </style>
 </head>
 <body>
-  <h2>Convert</h2>
-  <input type="text" id="a" placeholder="Enter hex string " />
-  <button onclick="b()">Decode</button>
-  <div id="c"></div>
+  <h2>Converter</h2>
+
+  <input type="text" id="hexInput" placeholder="Enter string" />
+  <button onclick="processHex()">Decode</button>
+
+  <div id="output"></div>
+
   <script>
-    function d(e){let f=[];try{for(let g=0;g<e.length;g+=2){let h=e.substr(g,2);let i=(parseInt(h,16)^255).toString(16).toUpperCase().padStart(2,"0");f.push(i)}return f}catch{return null}}
+    
+    function xorHexWithFF(hexString) {
+      const result = [];
+      try {
+        for (let i = 0; i < hexString.length; i += 2) {
+          const byte = hexString.substr(i, 2);
+          const xorByte = (parseInt(byte, 16) ^ 0xFF)
+            .toString(16)
+            .toUpperCase()
+            .padStart(2, '0');
+          result.push(xorByte);
+        }
+        return result;
+      } catch {
+        return null;
+      }
+    }
 
-    function j(k){let l=k[0]+k[3],m=k[1]+k[4];return{n:parseInt(l,16),o:parseInt(m,16)}}
+    
+    function extractAndConvert(xorResult) {
+      const mobileHex = xorResult[0] + xorResult[3];
+      const handyHex = xorResult[1] + xorResult[4];
+      const mobileId = parseInt(mobileHex, 16);
+      const handyId = parseInt(handyHex, 16);
+      return { mobileId, handyId };
+    }
 
-    function b(){let p=document.getElementById("a").value.trim().toUpperCase(),q=document.getElementById("c");q.textContent="";if(!p||p.length<10||p.length%2!==0){q.textContent="Error: Invalid hex string. Ensure it's at least 5 bytes long and has an even length.";return}
-      let r=d(p);if(!r){q.textContent="Error: Invalid hex string. Ensure it contains valid hexadecimal characters.";return}
-      q.textContent+="Decoded XOR Result: "+r.join(" ")+"\n";if(r.length<5){q.textContent+="Error: Not enough bytes to extract Mobile ID and Handy ID.";return}
-      try{let s=j(r);q.textContent+="Mobile ID: "+s.n+"\nHandy ID: "+s.o}catch{q.textContent+="Error: Failed to extract or convert Mobile ID and Handy ID."}}
+    
+    function processHex() {
+      const input = document.getElementById("hexInput").value.trim().toUpperCase();
+      const outputDiv = document.getElementById("output");
+      outputDiv.textContent = "";
+
+      if (!input || input.length < 10 || input.length % 2 !== 0) {
+        outputDiv.textContent = "Error: Invalid hex string. Ensure it's at least 5 bytes long and has an even length.";
+        return;
+      }
+
+      const xorResult = xorHexWithFF(input);
+      if (!xorResult) {
+        outputDiv.textContent = "Error: Invalid hex string. Ensure it contains valid hexadecimal characters.";
+        return;
+      }
+
+      outputDiv.textContent += `Decoded XOR Result: ${xorResult.join(" ")}\n`;
+
+      if (xorResult.length < 5) {
+        outputDiv.textContent += "Error: Not enough bytes to extract Mobile ID and Handy ID.";
+        return;
+      }
+
+      try {
+        const { mobileId, handyId } = extractAndConvert(xorResult);
+        outputDiv.textContent += `Mobile ID: ${mobileId}\nHandy ID: ${handyId}`;
+      } catch {
+        outputDiv.textContent += "Error: Failed to extract or convert Mobile ID and Handy ID.";
+      }
+    }
   </script>
 </body>
 </html>
