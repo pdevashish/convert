@@ -1,98 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Converter</title>
+  <title>Decoder</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 500px;
+      width: 100%;
     }
 
     input[type="text"] {
-      width: 300px;
+      width: 90%;
+      padding: 12px;
       font-size: 16px;
-      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
     }
 
     button {
+      padding: 10px 20px;
       font-size: 16px;
-      padding: 5px 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
 
-    #output {
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #c {
       margin-top: 20px;
-      white-space: pre-wrap;
+      text-align: left;
       font-family: monospace;
+      white-space: pre-wrap;
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
     }
   </style>
 </head>
 <body>
-  <h2>Converter</h2>
-
-  <input type="text" id="hexInput" placeholder="Enter string" />
-  <button onclick="processHex()">Decode</button>
-
-  <div id="output"></div>
+  <div class="box">
+    <h2>Decoder</h2>
+    <input type="text" id="a" placeholder="Enter String" />
+    <br>
+    <button onclick="b()">Decode</button>
+    <div id="c"></div>
+  </div>
 
   <script>
-    
-    function xorHexWithFF(hexString) {
-      const result = [];
-      try {
-        for (let i = 0; i < hexString.length; i += 2) {
-          const byte = hexString.substr(i, 2);
-          const xorByte = (parseInt(byte, 16) ^ 0xFF)
-            .toString(16)
-            .toUpperCase()
-            .padStart(2, '0');
-          result.push(xorByte);
-        }
-        return result;
-      } catch {
-        return null;
-      }
-    }
+    function d(e){let f=[];try{for(let g=0;g<e.length;g+=2){let h=e.substr(g,2);let i=(parseInt(h,16)^255).toString(16).toUpperCase().padStart(2,"0");f.push(i)}return f}catch{return null}}
 
-    
-    function extractAndConvert(xorResult) {
-      const mobileHex = xorResult[0] + xorResult[3];
-      const handyHex = xorResult[1] + xorResult[4];
-      const mobileId = parseInt(mobileHex, 16);
-      const handyId = parseInt(handyHex, 16);
-      return { mobileId, handyId };
-    }
+    function j(k){let l=k[0]+k[3],m=k[1]+k[4];return{n:parseInt(l,16),o:parseInt(m,16)}}
 
-    
-    function processHex() {
-      const input = document.getElementById("hexInput").value.trim().toUpperCase();
-      const outputDiv = document.getElementById("output");
-      outputDiv.textContent = "";
-
-      if (!input || input.length < 10 || input.length % 2 !== 0) {
-        outputDiv.textContent = "Error: Invalid hex string. Ensure it's at least 5 bytes long and has an even length.";
-        return;
-      }
-
-      const xorResult = xorHexWithFF(input);
-      if (!xorResult) {
-        outputDiv.textContent = "Error: Invalid hex string. Ensure it contains valid hexadecimal characters.";
-        return;
-      }
-
-      outputDiv.textContent += `Decoded XOR Result: ${xorResult.join(" ")}\n`;
-
-      if (xorResult.length < 5) {
-        outputDiv.textContent += "Error: Not enough bytes to extract Mobile ID and Handy ID.";
-        return;
-      }
-
-      try {
-        const { mobileId, handyId } = extractAndConvert(xorResult);
-        outputDiv.textContent += `Mobile ID: ${mobileId}\nHandy ID: ${handyId}`;
-      } catch {
-        outputDiv.textContent += "Error: Failed to extract or convert Mobile ID and Handy ID.";
-      }
-    }
+    function b(){let p=document.getElementById("a").value.trim().toUpperCase(),q=document.getElementById("c");q.textContent="";if(!p||p.length<10||p.length%2!==0){q.textContent="Error: Invalid hex string. Ensure it's at least 5 bytes long and has an even length.";return}
+      let r=d(p);if(!r){q.textContent="Error: Invalid hex string. Ensure it contains valid hexadecimal characters.";return}
+      q.textContent+="Decoded XOR Result: "+r.join(" ")+"\n";if(r.length<5){q.textContent+="Error: Not enough bytes to extract Mob and Hand.";return}
+      try{let s=j(r);q.textContent+="Mob: "+s.n+"\nHand: "+s.o}catch{q.textContent+="Error: Failed to extract or convert Mob and Hand."}}
   </script>
 </body>
 </html>
