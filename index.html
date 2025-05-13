@@ -24,7 +24,7 @@
       width: 100%;
     }
 
-    input[type="text"] {
+    input[type="text"], input[type="password"] {
       width: 90%;
       padding: 12px;
       font-size: 16px;
@@ -58,18 +58,44 @@
       border-radius: 8px;
       border: 1px solid #ddd;
     }
+
+    #decoder, #error {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="box">
-    <h2>Decoder</h2>
-    <input type="text" id="a" placeholder="Enter String" />
-    <br>
-    <button onclick="b()">Decode</button>
-    <div id="c"></div>
+    <div id="login">
+      <h2>Enter Password</h2>
+      <input type="password" id="pw" placeholder="Password" />
+      <br>
+      <button onclick="x()">Submit</button>
+      <div id="error" style="color:red;margin-top:10px;">Invalid password!</div>
+    </div>
+
+    <div id="decoder">
+      <h2>Decoder</h2>
+      <input type="text" id="a" placeholder="Enter String" />
+      <br>
+      <button onclick="b()">Decode</button>
+      <div id="c"></div>
+    </div>
   </div>
 
   <script>
+    function x() {
+      let z = document.getElementById("pw").value.trim();
+      let y = z.split("").map(c => c.charCodeAt(0)).join("-");
+      let k = "97-98-99-100-64-49-50-51-52"; 
+      if (y === k) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("decoder").style.display = "block";
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    }
+
     function d(e){let f=[];try{for(let g=0;g<e.length;g+=2){let h=e.substr(g,2);let i=(parseInt(h,16)^255).toString(16).toUpperCase().padStart(2,"0");f.push(i)}return f}catch{return null}}
 
     function j(k){let l=k[0]+k[3],m=k[1]+k[4];return{n:parseInt(l,16),o:parseInt(m,16)}}
