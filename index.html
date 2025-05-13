@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Converter</title>
+</head>
+<body>
+  <h2>Convert</h2>
+  <input type="text" id="a" placeholder="Enter hex string " />
+  <button onclick="b()">Decode</button>
+  <div id="c"></div>
+  <script>
+    function d(e){let f=[];try{for(let g=0;g<e.length;g+=2){let h=e.substr(g,2);let i=(parseInt(h,16)^255).toString(16).toUpperCase().padStart(2,"0");f.push(i)}return f}catch{return null}}
+
+    function j(k){let l=k[0]+k[3],m=k[1]+k[4];return{n:parseInt(l,16),o:parseInt(m,16)}}
+
+    function b(){let p=document.getElementById("a").value.trim().toUpperCase(),q=document.getElementById("c");q.textContent="";if(!p||p.length<10||p.length%2!==0){q.textContent="Error: Invalid hex string. Ensure it's at least 5 bytes long and has an even length.";return}
+      let r=d(p);if(!r){q.textContent="Error: Invalid hex string. Ensure it contains valid hexadecimal characters.";return}
+      q.textContent+="Decoded XOR Result: "+r.join(" ")+"\n";if(r.length<5){q.textContent+="Error: Not enough bytes to extract Mobile ID and Handy ID.";return}
+      try{let s=j(r);q.textContent+="Mobile ID: "+s.n+"\nHandy ID: "+s.o}catch{q.textContent+="Error: Failed to extract or convert Mobile ID and Handy ID."}}
+  </script>
+</body>
+</html>
