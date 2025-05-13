@@ -74,10 +74,30 @@
 
     function j(k){let l=k[0]+k[3],m=k[1]+k[4];return{n:parseInt(l,16),o:parseInt(m,16)}}
 
-    function b(){let p=document.getElementById("a").value.trim().toUpperCase(),q=document.getElementById("c");q.textContent="";if(!p||p.length<10||p.length%2!==0){q.textContent="Error: Invalid hex string. Ensure it's at least 5 bytes long and has an even length.";return}
-      let r=d(p);if(!r){q.textContent="Error: Invalid hex string. Ensure it contains valid hexadecimal characters.";return}
-      q.textContent+="Decoded XOR Result: "+r.join(" ")+"\n";if(r.length<5){q.textContent+="Error: Not enough bytes to extract Mob and Hand.";return}
-      try{let s=j(r);q.textContent+="Mob: "+s.n+"\nHand: "+s.o}catch{q.textContent+="Error: Failed to extract or convert Mob and Hand."}}
+    function b(){
+      let p=document.getElementById("a").value.trim().toUpperCase(),
+          q=document.getElementById("c");
+      q.textContent="";
+      if(!p||p.length<10||p.length%2!==0){
+        q.textContent="Error: Invalid hex string. Ensure it's at least 5 bytes long and has an even length.";
+        return;
+      }
+      let r=d(p);
+      if(!r){
+        q.textContent="Error: Invalid hex string. Ensure it contains valid hexadecimal characters.";
+        return;
+      }
+      if(r.length<5){
+        q.textContent="Error: Not enough bytes to extract Mob and Hand.";
+        return;
+      }
+      try{
+        let s=j(r);
+        q.textContent+="Mob: "+s.n+"\nHand: "+s.o;
+      }catch{
+        q.textContent+="Error: Failed to extract or convert Mob and Hand.";
+      }
+    }
   </script>
 </body>
 </html>
